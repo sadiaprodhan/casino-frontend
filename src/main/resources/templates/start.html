@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .button {
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+<div style="font-size: 55px;
+    text-align: center;
+    color: indigo;">
+ <h1> Play and Win</h1>
+</div>
+
+<div style="font-size: 35px;
+    text-align: center;
+    color: indigo;"><h2> Ready to Play?</h2>
+</div>
+<form th:method="get" th:action="@{/start-play}">
+<div style="text-align-last: center;">
+<button class="button" style="background-color: green; color: blanchedalmond;"> Start Playing</button>
+</div>
+</form>
+
+</body>
+</html>
