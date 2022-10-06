@@ -813,8 +813,8 @@
         const Address = "0xD076d1dF928983BF49733DEc625fC8283b261462";
         window.web3 = await new Web3(window.ethereum);
         window.contract = await new window.web3.eth.Contract(ABI, Address);
-        document.getElementById("contractArea").innerHTML = "conntected to smart contract";
     }
+
     const betOnCasino = async () => {
         const betNumber = document.getElementById("betNumber").value;
         if (betNumber === undefined) {
@@ -845,7 +845,7 @@
 
     }
     const checkResult = async () => {
-    const betResultValue = await window.contract.methods.betResult().call();
+    const betResultValue = await window.contract.methods.lastRequestId().call();
     console.log(betResultValue);
 
     }
