@@ -19,6 +19,15 @@
 
 </head>
 <body>
+    <div id ="metamaskDiv">
+        <button onclick="connectMetamask()" id="connectMetamaskButton"   style="background-color: green; color: blanchedalmond;"> Connect to Metamask</button>
+
+    </div>
+
+
+
+<div id="betDiv">
+
 <h2 style="font-size: 55px;
     text-align: center;
     color: indigo;"> Welcome to the Casino Demo</h2>
@@ -28,6 +37,7 @@
     color: indigo;"> How many Wei do you want to bet with:</h2>
 <br>
 <br>
+
 <div style=" text-align: center;">
 <input id="betAmount" type="number" placeholder="Enter your wei amount here" min="1"  style="width:300px;" required >
 </div>
@@ -39,403 +49,399 @@
 <div style="text-align: center;">
 <input id="betNumber" type="number" min="1" max="6"  placeholder="Enter your bet number here" style="width:300px;" required>
 </div>
-<br> <br>
+<br>
     <div style="text-align-last: center;">
         <button onclick="betOnCasino()" id="betButton"   style="background-color: green; color: blanchedalmond;"> BET</button>
     </div>
 
+    <div style="text-align-last: center;">
+        <button onclick="checkResult()" id="checkResult"   style="background-color: green; color: blanchedalmond;"> Check</button>
+    </div>
+
+    <div id="loader" style="display: none">Loading...</div>
+    </div>
 <script>
     let account;
+
     $(document ).ready(function() {
 
-        if (window.ethereum !== "undefined") {
-            const accounts = ethereum.request({method: "eth_requestAccounts"});
-
-            console.log(accounts);
-            account = accounts[0];
-            console.log(account);
-            document.getElementById("accountArea").innerHTML = account;
-            console.log("Meta Mask connected");
-
-        }
-        const ABI = [
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint64",
-                        "name": "subscriptionId",
-                        "type": "uint64"
-                    }
-                ],
-                "stateMutability": "nonpayable",
-                "type": "constructor"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "have",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "want",
-                        "type": "address"
-                    }
-                ],
-                "name": "OnlyCoordinatorCanFulfill",
-                "type": "error"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "from",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
-                    }
-                ],
-                "name": "OwnershipTransferRequested",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "from",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
-                    }
-                ],
-                "name": "OwnershipTransferred",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": false,
-                        "internalType": "uint256",
-                        "name": "requestId",
-                        "type": "uint256"
-                    },
-                    {
-                        "indexed": false,
-                        "internalType": "uint256[]",
-                        "name": "randomWords",
-                        "type": "uint256[]"
-                    }
-                ],
-                "name": "RequestFulfilled",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": false,
-                        "internalType": "uint256",
-                        "name": "requestId",
-                        "type": "uint256"
-                    },
-                    {
-                        "indexed": false,
-                        "internalType": "uint32",
-                        "name": "numWords",
-                        "type": "uint32"
-                    }
-                ],
-                "name": "RequestSent",
-                "type": "event"
-            },
-            {
-                "inputs": [],
-                "name": "acceptOwnership",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "addBalance",
-                "outputs": [],
-                "stateMutability": "payable",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "betResult",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "casino",
-                "outputs": [
-                    {
-                        "internalType": "address payable",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "_requestId",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "getRequestStatus",
-                "outputs": [
-                    {
-                        "internalType": "bool",
-                        "name": "fulfilled",
-                        "type": "bool"
-                    },
-                    {
-                        "internalType": "uint256[]",
-                        "name": "randomWords",
-                        "type": "uint256[]"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "lastRequestId",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "maxBet",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "maxBetRatio",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "owner",
-                "outputs": [
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "betNumber",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "playGame",
-                "outputs": [],
-                "stateMutability": "payable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "requestId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256[]",
-                        "name": "randomWords",
-                        "type": "uint256[]"
-                    }
-                ],
-                "name": "rawFulfillRandomWords",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "records",
-                "outputs": [
-                    {
-                        "internalType": "address payable",
-                        "name": "playerAddress",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "betNumber",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "betAmount",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "requestIds",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "requestRandomWords",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "requestId",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "s_requests",
-                "outputs": [
-                    {
-                        "internalType": "bool",
-                        "name": "fulfilled",
-                        "type": "bool"
-                    },
-                    {
-                        "internalType": "bool",
-                        "name": "exists",
-                        "type": "bool"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
-                    }
-                ],
-                "name": "transferOwnership",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "withdraw_wei_amount",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "withdrawWei",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            }
-        ];
-        const Address = "0xD076d1dF928983BF49733DEc625fC8283b261462";
-        window.web3 = new Web3(window.ethereum);
-        window.contract = new window.web3.eth.Contract(ABI, Address);
-        console.log("Contract Connected");
-
+        document.getElementById("betDiv").style.display = "none";
 
     });
     const connectMetamask = async () => {
+
         if(window.ethereum !== "undefined"){
             const accounts = await ethereum.request({method: "eth_requestAccounts"});
-
-            console.log(accounts);
             account = accounts[0];
             console.log(account);
-            document.getElementById("accountArea").innerHTML = account;
+            const ABI = [
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint64",
+                            "name": "subscriptionId",
+                            "type": "uint64"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "constructor"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "have",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "want",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "OnlyCoordinatorCanFulfill",
+                    "type": "error"
+                },
+                {
+                    "anonymous": false,
+                    "inputs": [
+                        {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "from",
+                            "type": "address"
+                        },
+                        {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "to",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "OwnershipTransferRequested",
+                    "type": "event"
+                },
+                {
+                    "anonymous": false,
+                    "inputs": [
+                        {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "from",
+                            "type": "address"
+                        },
+                        {
+                            "indexed": true,
+                            "internalType": "address",
+                            "name": "to",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "OwnershipTransferred",
+                    "type": "event"
+                },
+                {
+                    "anonymous": false,
+                    "inputs": [
+                        {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "requestId",
+                            "type": "uint256"
+                        },
+                        {
+                            "indexed": false,
+                            "internalType": "uint256[]",
+                            "name": "randomWords",
+                            "type": "uint256[]"
+                        }
+                    ],
+                    "name": "RequestFulfilled",
+                    "type": "event"
+                },
+                {
+                    "anonymous": false,
+                    "inputs": [
+                        {
+                            "indexed": false,
+                            "internalType": "uint256",
+                            "name": "requestId",
+                            "type": "uint256"
+                        },
+                        {
+                            "indexed": false,
+                            "internalType": "uint32",
+                            "name": "numWords",
+                            "type": "uint32"
+                        }
+                    ],
+                    "name": "RequestSent",
+                    "type": "event"
+                },
+                {
+                    "inputs": [],
+                    "name": "acceptOwnership",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "addBalance",
+                    "outputs": [],
+                    "stateMutability": "payable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "betResult",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "casino",
+                    "outputs": [
+                        {
+                            "internalType": "address payable",
+                            "name": "",
+                            "type": "address"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "_requestId",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "getRequestStatus",
+                    "outputs": [
+                        {
+                            "internalType": "bool",
+                            "name": "fulfilled",
+                            "type": "bool"
+                        },
+                        {
+                            "internalType": "uint256[]",
+                            "name": "randomWords",
+                            "type": "uint256[]"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "lastRequestId",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "maxBet",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "maxBetRatio",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "owner",
+                    "outputs": [
+                        {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "betNumber",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "playGame",
+                    "outputs": [],
+                    "stateMutability": "payable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "requestId",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256[]",
+                            "name": "randomWords",
+                            "type": "uint256[]"
+                        }
+                    ],
+                    "name": "rawFulfillRandomWords",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "records",
+                    "outputs": [
+                        {
+                            "internalType": "address payable",
+                            "name": "playerAddress",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "betNumber",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "betAmount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "requestIds",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "requestRandomWords",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "requestId",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "s_requests",
+                    "outputs": [
+                        {
+                            "internalType": "bool",
+                            "name": "fulfilled",
+                            "type": "bool"
+                        },
+                        {
+                            "internalType": "bool",
+                            "name": "exists",
+                            "type": "bool"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "to",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "transferOwnership",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "withdraw_wei_amount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "withdrawWei",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                }
+            ] ;
+            const Address = "0xD076d1dF928983BF49733DEc625fC8283b261462";
+            window.web3 = await new Web3(window.ethereum);
+            window.contract = await new window.web3.eth.Contract(ABI, Address);
+            document.getElementById("metamaskDiv").style.display = "none";
+            document.getElementById("betDiv").style.display = "block";
         }
     }
 
@@ -828,9 +834,25 @@
             alert("Enter bet amount greater than 0");
             return;
         }
+        const loader = document.querySelector('#loader')
         console.log(betAmount);
         console.log(betNumber);
-        await window.contract.methods.playGame(betNumber).send({from: account, value: betAmount});
+        loader.style.display = 'block'
+        const trans = await window.contract.methods.playGame(betNumber).send({from: account, value: betAmount});
+        console.log(trans)
+        loader.style.display = 'none';
+
+
+    }
+    const checkResult = async () => {
+    const betResultValue = await window.contract.methods.betResult().call();
+    console.log(betResultValue);
+
+    }
+
+        function sleep(delay) {
+        var start = new Date().getTime();
+        while (new Date().getTime() < start + delay);
     }
 
 </script>

@@ -1,6 +1,7 @@
 package com.example.casino.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -14,7 +15,8 @@ public class HomeController {
     }
 
     @GetMapping("/start-play")
-    public ModelAndView startPlay(){
+    public ModelAndView startPlay(Model model){
+        model.addAttribute("connection", false);
         return new ModelAndView("Play");
     }
 }
