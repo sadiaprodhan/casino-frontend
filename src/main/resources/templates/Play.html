@@ -74,18 +74,7 @@
             const accounts = await ethereum.request({method: "eth_requestAccounts"});
             account = accounts[0];
             console.log(account);
-            const ABI = [
-                {
-                    "inputs": [
-                        {
-                            "internalType": "uint64",
-                            "name": "subscriptionId",
-                            "type": "uint64"
-                        }
-                    ],
-                    "stateMutability": "nonpayable",
-                    "type": "constructor"
-                },
+            const ABI =[
                 {
                     "inputs": [
                         {
@@ -193,6 +182,87 @@
                     "type": "function"
                 },
                 {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "betNumber",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "playGame",
+                    "outputs": [],
+                    "stateMutability": "payable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "requestId",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256[]",
+                            "name": "randomWords",
+                            "type": "uint256[]"
+                        }
+                    ],
+                    "name": "rawFulfillRandomWords",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "requestRandomWords",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "requestId",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "to",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "transferOwnership",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "withdraw_wei_amount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "withdrawWei",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint64",
+                            "name": "subscriptionId",
+                            "type": "uint64"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "constructor"
+                },
+                {
                     "inputs": [],
                     "name": "betResult",
                     "outputs": [
@@ -298,37 +368,6 @@
                     "inputs": [
                         {
                             "internalType": "uint256",
-                            "name": "betNumber",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "playGame",
-                    "outputs": [],
-                    "stateMutability": "payable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "uint256",
-                            "name": "requestId",
-                            "type": "uint256"
-                        },
-                        {
-                            "internalType": "uint256[]",
-                            "name": "randomWords",
-                            "type": "uint256[]"
-                        }
-                    ],
-                    "name": "rawFulfillRandomWords",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "uint256",
                             "name": "",
                             "type": "uint256"
                         }
@@ -374,19 +413,6 @@
                     "type": "function"
                 },
                 {
-                    "inputs": [],
-                    "name": "requestRandomWords",
-                    "outputs": [
-                        {
-                            "internalType": "uint256",
-                            "name": "requestId",
-                            "type": "uint256"
-                        }
-                    ],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                },
-                {
                     "inputs": [
                         {
                             "internalType": "uint256",
@@ -409,37 +435,12 @@
                     ],
                     "stateMutability": "view",
                     "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "to",
-                            "type": "address"
-                        }
-                    ],
-                    "name": "transferOwnership",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "uint256",
-                            "name": "withdraw_wei_amount",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "withdrawWei",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
                 }
-            ] ;
-            const Address = "0xD076d1dF928983BF49733DEc625fC8283b261462";
+            ];
+            const Address = "0xd9145CCE52D386f254917e481eB44e9943F39138";
             window.web3 = await new Web3(window.ethereum);
             window.contract = await new window.web3.eth.Contract(ABI, Address);
+            console.log(window.contract);
             document.getElementById("metamaskDiv").style.display = "none";
             document.getElementById("betDiv").style.display = "block";
         }
@@ -810,7 +811,7 @@
                 "type": "function"
             }
         ] ;
-        const Address = "0xD076d1dF928983BF49733DEc625fC8283b261462";
+        const Address = "0x219146B7c8161b48F10a434257EEb3f73ec6f720";
         window.web3 = await new Web3(window.ethereum);
         window.contract = await new window.web3.eth.Contract(ABI, Address);
     }
@@ -841,12 +842,16 @@
         const trans = await window.contract.methods.playGame(betNumber).send({from: account, value: betAmount});
         console.log(trans)
         loader.style.display = 'none';
+        sleep(30000);
 
+        const data = await window.contract.methods.betResult().call();
+        console.log(data);
 
     }
+
     const checkResult = async () => {
-    const betResultValue = await window.contract.methods.lastRequestId().call();
-    console.log(betResultValue);
+        const data = await window.contract.methods.maxBetRatio().call();
+        console.log(data);
 
     }
 
